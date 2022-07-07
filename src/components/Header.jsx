@@ -1,23 +1,31 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
-export const Header = ({ color="primary" }) => {
+export const Header = ({ color }) => {
+  const letActiveStyle = {
+    color: "#F6423E",
+  };
+
   return (
-    <nav className="flex justify-end gap-5 py-4">
-      <Link
+    <nav className="flex justify-end py-4">
+      <NavLink
         to="/"
-        className={`text-xl text-${color}
-        font-medium cursor-pointer hover:underline`}
+        style={({ isActive }) =>
+          isActive ? { fontWeight: "bold" } : null
+        }
+        className={`text-${color} text-center text-lg font-normal mr-4`}
       >
         Inicio
-      </Link>
-      <Link
+      </NavLink>
+      <NavLink
         to="/clockwork"
-        className={`text-xl text-${color}
-         font-medium cursor-pointer hover:underlin`}
+        style={({ isActive }) =>
+          isActive ? { fontWeight: "bold" } : null
+        }
+        className={`text-${color} text-center text-lg font-normal`}
       >
         ClockWork
-      </Link>
+      </NavLink>
     </nav>
   );
 };
