@@ -4,10 +4,9 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { ConvertMinuteToString } from "../helpers/ConvertMinuteToString";
 import { ControlButtons } from "./ControlButtons";
 import "react-circular-progressbar/dist/styles.css";
-import "./PomodoroCustom.css";
 
 export const Pomodoro = () => {
-  const time = useRef(10);
+  const time = useRef(1500);
   const [clockTime, setClockTime] = useState(time.current);
   const [percentage, setPercentage] = useState(100);
   const [clockText, setClockText] = useState("");
