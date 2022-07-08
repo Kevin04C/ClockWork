@@ -29,6 +29,7 @@ export const Pomodoro = () => {
         setPercentage(percentage);
 
         audio.play();
+        audio.loop = true;
       }, 1000);
       return () => {
         clearInterval(interval);
@@ -39,7 +40,7 @@ export const Pomodoro = () => {
           setClockText(ConvertMinuteToString(300));
           setPercentage(100);
           setIsBreak(true);
-          audio.pause()
+          audio.pause();
         }
         if (clockTime === 0 && isBreak) {
           setIsPaused(false);
@@ -48,7 +49,10 @@ export const Pomodoro = () => {
           setClockText(ConvertMinuteToString(1500));
           setPercentage(100);
           setIsBreak(false);
-          audio.pause()
+          audio.pause();
+        }
+        if(!isRunning && isPaused){
+          audio.paused();
         }
       };
     }
@@ -75,10 +79,10 @@ export const Pomodoro = () => {
     setClockText(ConvertMinuteToString(1500));
     setIsBreak(false);
     setPercentage(100);
-    audio.pause()
+    audio.pause();
 
-    toast.dismiss(id);
     toast.success("ClockWork RESTABLECIDO");
+    toast.dismiss(id);
   };
 
   return (
