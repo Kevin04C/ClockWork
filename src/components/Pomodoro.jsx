@@ -8,13 +8,14 @@ import "react-circular-progressbar/dist/styles.css";
 import music from "../assets/music.mp3";
 
 export const Pomodoro = () => {
-  const [audio, setAudio] = useState(new Audio(music));
+  const audio = useRef(new Audio(music));
   const [time, setTime] = useState(1500);
   const [clockTime, setClockTime] = useState(time);
   const [percentage, setPercentage] = useState(100);
   const [clockText, setClockText] = useState("");
   const [isRunning, setIsRunning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [isMute, setIsMute] = useState(false);
 
   const [isBreak, setIsBreak] = useState(false);
 
@@ -28,8 +29,8 @@ export const Pomodoro = () => {
         const percentage = (clockTime * 100) / time;
         setPercentage(percentage);
 
-        audio.play();
-        audio.loop = true;
+        audio.current.play();
+        audio.current.loop = true;
       }, 1000);
       return () => {
         clearInterval(interval);
@@ -40,7 +41,7 @@ export const Pomodoro = () => {
           setClockText(ConvertMinuteToString(300));
           setPercentage(100);
           setIsBreak(true);
-          audio.pause();
+          audio.current.pause();
         }
         if (clockTime === 0 && isBreak) {
           setIsPaused(false);
@@ -49,10 +50,10 @@ export const Pomodoro = () => {
           setClockText(ConvertMinuteToString(1500));
           setPercentage(100);
           setIsBreak(false);
-          audio.pause();
+          audio.current.pause();
         }
-        if(!isRunning && isPaused){
-          audio.paused();
+        if (!isRunning && isPaused) {
+          audio.current.pause();
         }
       };
     }
@@ -69,7 +70,7 @@ export const Pomodoro = () => {
   const handlePaused = () => {
     setIsPaused(true);
     setIsRunning(false);
-    audio.pause();
+    audio.current.pause();
   };
   const handleResetPomodoro = (id) => {
     setIsRunning(false);
@@ -79,10 +80,20 @@ export const Pomodoro = () => {
     setClockText(ConvertMinuteToString(1500));
     setIsBreak(false);
     setPercentage(100);
-    audio.pause();
+    audio.current.pause();
 
     toast.success("ClockWork RESTABLECIDO");
     toast.dismiss(id);
+  };
+
+  const handleAudioMuted = () => {
+    if (isMute) {
+      audio.current.muted = false;
+      setIsMute(false);
+    } else {
+      audio.current.muted = true;
+      setIsMute(true);
+    }
   };
 
   return (
@@ -106,6 +117,8 @@ export const Pomodoro = () => {
         handlePaused={handlePaused}
         isRunning={isRunning}
         handleResetPomodoro={handleResetPomodoro}
+        handleAudioMuted={handleAudioMuted}
+        isMute={isMute}
       />
 
       {isBreak ? (
@@ -119,9 +132,10 @@ export const Pomodoro = () => {
             setIsPaused(true);
             setIsRunning(false);
             setClockText(ConvertMinuteToString(1500));
+            audio.current.pause();
           }}
         >
-          ¡RELIZAR UNA ACTIVIDAD!
+          ¡REALIZAR UNA ACTIVIDAD!
         </button>
       ) : (
         <button
@@ -134,6 +148,7 @@ export const Pomodoro = () => {
             setIsPaused(true);
             setIsRunning(false);
             setClockText(ConvertMinuteToString(300));
+            audio.current.pause();
           }}
         >
           ¡TOMAR UN DESCANSO!
